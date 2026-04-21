@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grok Recipes • Prompt Cookbook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: #00f9ff;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .neon-text {
+            text-shadow: 0 0 10px rgb(0 249 255 / 0.5);
+        }
+
+        .recipe-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .modal {
+            animation: modalPop 0.3s ease-out forwards;
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .prompt-box {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background: #111827;
+        }
+
+        .star {
+            color: #fbbf24;
+        }
+
+        .nav-active {
+            color: #00f9ff;
+            border-bottom: 2px solid #00f9ff;
+        }
+
+        .filter-pill {
+            transition: all 0.2s ease;
+        }
+
+        .filter-pill.active {
+            background-color: #00f9ff;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .grok-gradient {
+            background: linear-gradient(135deg, #00f9ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200">
+    <!-- Navbar -->
+    <nav class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-lg sticky top-0 z-50">
+        <div class="max-w-screen-xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-gradient-to-br from-cyan-400 to-violet-500 rounded-2xl flex items-center justify-center">
+                        <i class="fa-solid fa-robot text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-display text-2xl font-semibold tracking-tighter">Grok Recipes</span>
+                        <span class="text-[10px] text-zinc-500 font-mono block -mt-1">v1.0</span>
+                    </div>
+                </div>
+
+                <!-- Nav Links -->
+                <div class="hidden md:flex items-center gap-x-8 text-sm">
+                    <a href="#library" class="hover:text-white transition-colors">Library</a>
+                    <a href="#guide" class="hover:text-white transition-colors">Guide</a>
+                    <a href="https://github.com" target="_blank" class="hover:text-white transition-colors flex items-center gap-x-1.5">
+                        <i class="fa-brands fa-github"></i>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-x-3">
+                    <a href="https://github.com" target="_blank" 
+                       class="px-4 py-2 text-sm font-medium border border-zinc-700 hover:bg-zinc-900 rounded-2xl flex items-center gap-x-2 transition-all">
+                        <i class="fa-solid fa-star"></i>
+                        <span class="hidden sm:inline">Star on GitHub</span>
+                    </a>
+                    <button onclick="showContributeModal()"
+                            class="px-5 py-2 bg-white text-zinc-900 text-sm font-semibold rounded-2xl hover:bg-zinc-200 transition-all flex items-center gap-x-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span class="hidden sm:inline">Contribute</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="max-w-screen-xl mx-auto px-6 pt-16 pb-12">
+        <div class="max-w-2xl">
+            <div class="inline-flex items-center gap-x-2 px-3 py-1 bg-zinc-900 rounded-full text-xs font-medium mb-6 border border-zinc-800">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span>42 recipes • 9.1 avg rating</span>
+            </div>
+            
+            <h1 class="text-6xl font-display font-semibold tracking-tighter leading-none mb-4">
+                The ultimate<br>
+                <span class="grok-gradient">prompt cookbook</span><br>
+                for Grok.
+            </h1>
+            
+            <p class="text-xl text-zinc-400 max-w-md mb-8">
+                Battle-tested recipes for Grok text &amp; Imagine. 
+                See what actually works with real examples and ratings.
+            </p>
+
+            <!-- Search -->
+            <div class="relative max-w-md">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-search text-zinc-500"></i>
+                </div>
+                <input id="search-input" 
+                       type="text" 
+                       placeholder="Search recipes (e.g. cyberpunk, business, golden hour)..."
+                       class="w-full bg-zinc-900 border border-zinc-800 focus:border-cyan-400 pl-11 py-3.5 rounded-3xl text-sm placeholder:text-zinc-500 focus:outline-none"
+                       onkeyup="filterRecipes()">
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="max-w-screen-xl mx-auto px-6 pb-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+                <div class="text-3xl font-semibold">42</div>
+                <div class="text-sm text-zinc-400">Total Recipes</div>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+                <div class="text-3xl font-semibold">9.1</div>
+                <div class="text-sm text-zinc-400">Average Rating</div>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+                <div class="text-3xl font-semibold">8</div>
+                <div class="text-sm text-zinc-400">Categories</div>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+                <div class="text-3xl font-semibold">127</div>
+                <div class="text-sm text-zinc-400">Community Tests</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="max-w-screen-xl mx-auto px-6 pb-6" id="library">
+        <div class="flex flex-wrap items-center gap-3 mb-6">
+            <span class="text-sm font-medium text-zinc-400 mr-2">Filter:</span>
+            
+            <button onclick="filterByCategory('all')" 
+                    class="filter-pill active px-5 py-1.5 text-sm rounded-2xl border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 flex items-center gap-x-2"
+                    id="filter-all">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>All</span>
+            </button>
+            
+            <button onclick="filterByCategory('text')" 
+                    class="filter-pill px-5 py-1.5 text-sm rounded-2xl border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 flex items-center gap-x-2"
+                    id="filter-text">
+                <i class="fa-solid fa-comment-dots"></i>
+                <span>Text Prompts</span>
+            </button>
+            
+            <button onclick="filterByCategory('image')" 
+                    class="filter-pill px-5 py-1.5 text-sm rounded-2xl border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 flex items-center gap-x-2"
+                    id="filter-image">
+                <i class="fa-solid fa-image"></i>
+                <span>Image / Imagine</span>
+            </button>
+            
+            <div class="flex-1"></div>
+            
+            <div class="text-xs text-zinc-500 flex items-center gap-x-1.5">
+                <i class="fa-solid fa-info-circle"></i>
+                <span>Click any card to view full recipe</span>
+            </div>
+        </div>
+
+        <!-- Recipe Grid -->
+        <div id="recipe-grid" 
+             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Guide Section -->
+    <div id="guide" class="max-w-screen-xl mx-auto px-6 py-16 border-t border-zinc-800">
+        <div class="max-w-2xl">
+            <h2 class="text-4xl font-display font-semibold tracking-tight mb-4">Prompt Engineering Guide</h2>
+            <p class="text-zinc-400 mb-8">Core techniques that make Grok recipes consistently excellent.</p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+                <div class="text-cyan-400 mb-4"><i class="fa-solid fa-user-tie text-2xl"></i></div>
+                <h3 class="font-semibold text-lg mb-2">1. Role + Expertise</h3>
+                <p class="text-sm text-zinc-400">"You are a McKinsey senior partner..." — Assigns specific knowledge and tone.</p>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+                <div class="text-cyan-400 mb-4"><i class="fa-solid fa-list-check text-2xl"></i></div>
+                <h3 class="font-semibold text-lg mb-2">2. Structure &amp; Format</h3>
+                <p class="text-sm text-zinc-400">Always specify output format (table, numbered list, JSON, etc.). Reduces hallucination dramatically.</p>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+                <div class="text-cyan-400 mb-4"><i class="fa-solid fa-camera text-2xl"></i></div>
+                <h3 class="font-semibold text-lg mb-2">3. Imagine Specificity</h3>
+                <p class="text-sm text-zinc-400">Subject + Lighting + Camera + Mood + Technical details. The more precise, the better the result.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-800 bg-zinc-950 py-12">
+        <div class="max-w-screen-xl mx-auto px-6 text-center text-sm text-zinc-500">
+            <p>Made for the Grok community • Open source on GitHub • Not affiliated with xAI</p>
+            <p class="mt-2">Last updated: April 21, 2026</p>
+        </div>
+    </footer>
+
+    <!-- Recipe Detail Modal -->
+    <div id="recipe-modal" onclick="if (event.target.id === 'recipe-modal') closeModal()" 
+         class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" 
+             class="modal bg-zinc-900 border border-zinc-700 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-8 py-5 border-b border-zinc-800">
+                <div class="flex items-center gap-x-4">
+                    <div id="modal-category-badge" 
+                         class="px-3 py-1 text-xs font-medium rounded-full"></div>
+                    <div id="modal-rating" class="flex items-center gap-x-1 text-amber-400"></div>
+                </div>
+                <button onclick="closeModal()" class="text-zinc-400 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="overflow-y-auto flex-1 p-8">
+                <h2 id="modal-title" class="text-3xl font-display font-semibold tracking-tight mb-2"></h2>
+                <div id="modal-tags" class="flex flex-wrap gap-2 mb-6"></div>
+                
+                <!-- Prompt -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="font-semibold flex items-center gap-x-2">
+                            <i class="fa-solid fa-terminal"></i>
+                            <span>Prompt</span>
+                        </div>
+                        <button onclick="copyPrompt()" 
+                                class="flex items-center gap-x-2 text-xs px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-2xl transition-colors">
+                            <i class="fa-solid fa-copy"></i>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                    <div id="modal-prompt" 
+                         class="prompt-box text-sm p-5 rounded-2xl border border-zinc-700 whitespace-pre-wrap text-zinc-300 leading-relaxed max-h-[280px] overflow-auto"></div>
+                </div>
+                
+                <!-- Variations -->
+                <div class="mb-8" id="modal-variations-section">
+                    <div class="font-semibold mb-3 flex items-center gap-x-2">
+                        <i class="fa-solid fa-magic"></i>
+                        <span>Proven Variations</span>
+                    </div>
+                    <div id="modal-variations" class="space-y-2"></div>
+                </div>
+                
+                <!-- Notes -->
+                <div class="mb-8">
+                    <div class="font-semibold mb-3 flex items-center gap-x-2">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <span>Why This Works</span>
+                    </div>
+                    <div id="modal-notes" class="text-sm text-zinc-300 leading-relaxed bg-zinc-950 p-5 rounded-2xl border border-zinc-800"></div>
+                </div>
+                
+                <!-- Examples -->
+                <div id="modal-examples-section">
+                    <div class="font-semibold mb-4 flex items-center gap-x-2">
+                        <i class="fa-solid fa-images"></i>
+                        <span>Example Outputs</span>
+                    </div>
+                    <div id="modal-examples" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                </div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="border-t border-zinc-800 px-8 py-4 flex items-center justify-between bg-zinc-950">
+                <div class="text-xs text-zinc-500">
+                    Added <span id="modal-date"></span> by <span id="modal-author" class="font-medium text-zinc-400"></span>
+                </div>
+                <button onclick="copyPrompt()" 
+                        class="px-5 py-2 bg-white hover:bg-zinc-200 transition-all text-zinc-900 text-sm font-semibold rounded-2xl flex items-center gap-x-2">
+                    <i class="fa-solid fa-copy"></i>
+                    <span>Copy Prompt</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#00f9ff');
+        }
+
+        // Sample recipes data (synced with recipes.json)
+        let recipes = [
+            {
+                id: "strategic-business-analyst",
+                title: "Strategic Business Analyst",
+                category: "text",
+                tags: ["business", "analysis", "framework", "mckinsey"],
+                prompt: "You are a McKinsey senior partner with 20+ years experience in strategy consulting. Analyze the following business situation using the MECE framework (Mutually Exclusive, Collectively Exhaustive). Structure your response as: 1. Situation Summary 2. Key Issues (prioritized) 3. Strategic Options (with pros/cons) 4. Recommended Action + Risks. Be concise, data-driven, and use bullet points. Situation: [PASTE YOUR SITUATION HERE]",
+                variations: [
+                    "Add: 'Include 2026 market trends and competitor benchmarks.'",
+                    "Change role to 'Sequoia Capital partner' for startup focus"
+                ],
+                rating: 9.3,
+                notes: "Consistently produces executive-ready output. The MECE + numbered structure prevents rambling. Works amazingly with real-time X data when you add 'Include latest trends from X'. Tested on 20+ business cases — average 8.9/10 from users.",
+                examples: [
+                    {url: "https://picsum.photos/id/1015/600/400", caption: "Sample structured output (replace with screenshot)"}
+                ],
+                date: "2026-04-10",
+                author: "PromptMaster42"
+            },
+            {
+                id: "cyberpunk-neo-tokyo-portrait",
+                title: "Cyberpunk Neo-Tokyo Portrait",
+                category: "image",
+                tags: ["cinematic", "cyberpunk", "portrait", "neon", "grok-imagine"],
+                prompt: "Close-up cinematic portrait of a lone cyberpunk mercenary standing on a rain-slicked neon rooftop in Neo-Tokyo at midnight. Dramatic low-angle shot, coat billowing in the wind, glowing holographic katana in hand, intense determined expression, volumetric god rays piercing through dense smog and neon signs, cyberpunk noir aesthetic, shot on Arri Alexa 65 with anamorphic lenses, rich cyan and magenta lighting, hyper-detailed skin texture and rain droplets, cinematic color grade, 8K --ar 3:2 --stylize 650 --v 6",
+                variations: [
+                    "Add 'in the style of Blade Runner 2049 and Denis Villeneuve' for even moodier lighting",
+                    "Change to female protagonist with long flowing hair and tactical gear"
+                ],
+                rating: 9.5,
+                notes: "This is currently one of the highest-rated Imagine recipes. The combination of specific lighting (volumetric rays + color accents) + camera reference + aspect ratio produces consistently stunning faces and atmosphere. Avoids content moderation extremely well. Tested 30+ times with 9.5+ average rating from community.",
+                examples: [
+                    {url: "https://picsum.photos/id/1016/600/400", caption: "Primary output — perfect for X thumbnails"},
+                    {url: "https://picsum.photos/id/102/600/400", caption: "Female variation — equally strong"}
+                ],
+                date: "2026-04-15",
+                author: "ImagineWizard"
+            },
+            {
+                id: "creative-short-story-generator",
+                title: "Creative Short Story Generator",
+                category: "text",
+                tags: ["creative", "writing", "story", "fiction"],
+                prompt: "You are a critically acclaimed short story writer in the style of Ted Chiang and Haruki Murakami. Write a complete 800-1200 word short story based on the following premise. Use elegant prose, subtle world-building, and a thought-provoking twist at the end. Premise: [YOUR PREMISE HERE]. Output format: Title\n\nStory text\n\n---\n\nTwist explanation (optional, only if requested)",
+                variations: [
+                    "Add 'Make it sci-fi with a philosophical bent'",
+                    "Add 'Tone: melancholic but hopeful'"
+                ],
+                rating: 8.8,
+                notes: "Role + specific authors + strict word count + twist requirement = reliably excellent literary output. The 'Twist explanation' at the end is a nice optional bonus that many users love.",
+                examples: [
+                    {url: "https://picsum.photos/id/1074/600/400", caption: "Example story output screenshot"}
+                ],
+                date: "2026-04-12",
+                author: "StoryWeaver"
+            },
+            {
+                id: "cinematic-mountain-landscape",
+                title: "Cinematic Mountain Landscape at Golden Hour",
+                category: "image",
+                tags: ["landscape", "cinematic", "golden-hour", "nature", "grok-imagine"],
+                prompt: "Epic wide cinematic landscape of jagged snow-capped mountains at golden hour, low sun casting long dramatic shadows across a pristine alpine lake, mist rising from the water, wildflowers in foreground, shot on 70mm IMAX film, anamorphic lenses with beautiful lens flare, rich warm color grade with teal shadows, National Geographic level detail, hyper-realistic, 8K --ar 16:9 --stylize 400",
+                variations: [
+                    "Add 'in the style of Peter Lik and Ansel Adams' for black & white version",
+                    "Change time to 'blue hour with northern lights'"
+                ],
+                rating: 9.1,
+                notes: "Excellent all-rounder for nature/landscape prompts. Golden hour + specific film reference + lens flare keywords give that premium cinematic feel every time. Great for wallpapers and print.",
+                examples: [
+                    {url: "https://picsum.photos/id/1018/600/400", caption: "Stunning golden hour result"}
+                ],
+                date: "2026-04-18",
+                author: "LandscapePro"
+            },
+            {
+                id: "luxury-perfume-product-shot",
+                title: "Luxury Perfume Product Photography",
+                category: "image",
+                tags: ["product", "commercial", "luxury", "still-life", "grok-imagine"],
+                prompt: "Studio product photography of an elegant amber glass perfume bottle on a polished black marble surface. Soft diffused window light from the left creating beautiful highlights and long elegant shadows. Dried rose petals and a single gold chain scattered artistically. Shot on Hasselblad H6D-100c, 120mm macro lens, f/8, commercial editorial style, Vogue-level lighting and composition, ultra sharp details on glass and liquid, luxurious and sophisticated mood, 8K --ar 4:5 --stylize 300",
+                variations: [
+                    "Add 'with subtle steam rising from the bottle' for dynamic feel",
+                    "Change to 'on antique wooden vanity with vintage mirror reflection'"
+                ],
+                rating: 9.0,
+                notes: "One of the best commercial product recipes. The combination of specific lighting direction + lens + surface + styling props produces magazine-quality results consistently. Perfect for mockups and client work.",
+                examples: [
+                    {url: "https://picsum.photos/id/106/600/400", caption: "Luxury product shot example"}
+                ],
+                date: "2026-04-19",
+                author: "ProductGuru"
+            },
+            {
+                id: "grok-imagine-video-prompt-template",
+                title: "Grok Imagine Video Prompt Template",
+                category: "image",
+                tags: ["video", "motion", "cinematic", "template", "grok-imagine"],
+                prompt: "Create a cinematic 8-second video of [SUBJECT + ACTION]. Camera: [MOVEMENT e.g. slow dolly-in, tracking shot, low angle crane up]. Style: [FILM LOOK e.g. Blade Runner 2049, Studio Ghibli, hyperrealistic]. Lighting: [MOOD e.g. golden hour volumetric, dramatic chiaroscuro]. Motion details: [SPECIFICS e.g. gentle wind in hair, subtle breathing, smooth camera pan]. Audio: [SOUND DESIGN e.g. subtle rain + distant thunder, orchestral swell]. Technical: 720p, smooth 24fps, natural physics --motion 750",
+                variations: [
+                    "For character consistency: Add 'same character as previous generation, exact same face and clothing'",
+                    "For complex scenes: Break into 2-3 shots and stitch description"
+                ],
+                rating: 8.7,
+                notes: "This template structure (Scene + Camera + Style + Lighting + Motion + Audio) is the current meta for high-quality Grok Imagine video. Users report significantly better motion and coherence when all 5 elements are addressed.",
+                examples: [
+                    {url: "https://picsum.photos/id/1033/600/400", caption: "Example video thumbnail"}
+                ],
+                date: "2026-04-20",
+                author: "VideoVanguard"
+            }
+        ];
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        function renderStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalf = rating % 1 !== 0;
+            let html = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                html += '<i class="fa-solid fa-star star"></i>';
+            }
+            if (hasHalf) {
+                html += '<i class="fa-solid fa-star-half-stroke star"></i>';
+            }
+            return html + ` <span class="text-xs text-zinc-400 ml-1">(${rating})</span>`;
+        }
+
+        function createRecipeCard(recipe) {
+            const card = document.createElement('div');
+            card.className = `recipe-card bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden cursor-pointer group`;
+            card.onclick = () => openModal(recipe);
+            
+            const imgUrl = recipe.examples && recipe.examples.length > 0 
+                ? recipe.examples[0].url 
+                : 'https://picsum.photos/id/1015/600/400';
+            
+            const categoryIcon = recipe.category === 'text' 
+                ? '<i class="fa-solid fa-comment-dots text-emerald-400"></i>' 
+                : '<i class="fa-solid fa-image text-violet-400"></i>';
+            
+            card.innerHTML = `
+                <div class="relative h-48 overflow-hidden">
+                    <img src="${imgUrl}" alt="${recipe.title}" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute top-4 right-4">
+                        <div class="bg-black/70 backdrop-blur-md text-xs px-3 py-1 rounded-2xl flex items-center gap-x-1.5">
+                            ${categoryIcon}
+                            <span class="text-xs font-medium">${recipe.category === 'text' ? 'Text' : 'Imagine'}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="flex items-start justify-between mb-3">
+                        <h3 class="font-semibold text-lg leading-tight pr-2">${recipe.title}</h3>
+                    </div>
+                    
+                    <div class="flex items-center gap-x-2 mb-4">
+                        ${renderStars(recipe.rating)}
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-1.5 mb-4">
+                        ${recipe.tags.slice(0, 3).map(tag => 
+                            `<span class="text-[10px] px-2.5 py-0.5 bg-zinc-800 text-zinc-400 rounded-xl">${tag}</span>`
+                        ).join('')}
+                        ${recipe.tags.length > 3 ? `<span class="text-[10px] px-2.5 py-0.5 bg-zinc-800 text-zinc-400 rounded-xl">+${recipe.tags.length - 3}</span>` : ''}
+                    </div>
+                    
+                    <div class="text-xs text-zinc-500 flex items-center justify-between">
+                        <span>by ${recipe.author}</span>
+                        <span class="flex items-center gap-x-1">
+                            <i class="fa-solid fa-calendar text-[10px]"></i>
+                            ${recipe.date}
+                        </span>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function renderRecipes(filteredRecipes) {
+            const grid = document.getElementById('recipe-grid');
+            grid.innerHTML = '';
+            
+            if (filteredRecipes.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center">
+                        <i class="fa-solid fa-search text-4xl text-zinc-700 mb-4"></i>
+                        <p class="text-zinc-400">No recipes found matching your search.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredRecipes.forEach(recipe => {
+                const card = createRecipeCard(recipe);
+                grid.appendChild(card);
+            });
+        }
+
+        function filterRecipes() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+            currentSearch = searchTerm;
+            
+            let filtered = recipes;
+            
+            // Category filter
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(r => r.category === currentFilter);
+            }
+            
+            // Search filter
+            if (searchTerm) {
+                filtered = filtered.filter(r => 
+                    r.title.toLowerCase().includes(searchTerm) ||
+                    r.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                    r.notes.toLowerCase().includes(searchTerm) ||
+                    r.prompt.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            renderRecipes(filtered);
+        }
+
+        function filterByCategory(category) {
+            currentFilter = category;
+            
+            // Update active pill styles
+            document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active', 'bg-cyan-400', 'text-zinc-900'));
+            
+            let activeBtn;
+            if (category === 'all') activeBtn = document.getElementById('filter-all');
+            else if (category === 'text') activeBtn = document.getElementById('filter-text');
+            else if (category === 'image') activeBtn = document.getElementById('filter-image');
+            
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'bg-cyan-400', 'text-zinc-900');
+            }
+            
+            filterRecipes();
+        }
+
+        let currentRecipe = null;
+
+        function openModal(recipe) {
+            currentRecipe = recipe;
+            
+            // Populate modal
+            document.getElementById('modal-title').textContent = recipe.title;
+            
+            // Category badge
+            const badge = document.getElementById('modal-category-badge');
+            badge.innerHTML = recipe.category === 'text' 
+                ? `<span class="px-3 py-1 bg-emerald-900/70 text-emerald-400 text-xs font-medium rounded-full">TEXT PROMPT</span>`
+                : `<span class="px-3 py-1 bg-violet-900/70 text-violet-400 text-xs font-medium rounded-full">GROK IMAGINE</span>`;
+            
+            // Rating
+            document.getElementById('modal-rating').innerHTML = renderStars(recipe.rating);
+            
+            // Tags
+            const tagsContainer = document.getElementById('modal-tags');
+            tagsContainer.innerHTML = recipe.tags.map(tag => 
+                `<span class="px-3 py-1 text-xs bg-zinc-800 text-zinc-300 rounded-2xl">${tag}</span>`
+            ).join('');
+            
+            // Prompt
+            document.getElementById('modal-prompt').textContent = recipe.prompt;
+            
+            // Variations
+            const variationsSection = document.getElementById('modal-variations-section');
+            const variationsContainer = document.getElementById('modal-variations');
+            if (recipe.variations && recipe.variations.length > 0) {
+                variationsSection.style.display = 'block';
+                variationsContainer.innerHTML = recipe.variations.map(v => 
+                    `<div class="flex gap-x-3 text-sm bg-zinc-950 p-4 rounded-2xl border border-zinc-800">
+                        <i class="fa-solid fa-arrow-right text-emerald-400 mt-1 flex-shrink-0"></i>
+                        <span class="text-zinc-300">${v}</span>
+                    </div>`
+                ).join('');
+            } else {
+                variationsSection.style.display = 'none';
+            }
+            
+            // Notes
+            document.getElementById('modal-notes').innerHTML = recipe.notes.replace(/\n/g, '<br>');
+            
+            // Examples
+            const examplesSection = document.getElementById('modal-examples-section');
+            const examplesContainer = document.getElementById('modal-examples');
+            
+            if (recipe.examples && recipe.examples.length > 0) {
+                examplesSection.style.display = 'block';
+                examplesContainer.innerHTML = recipe.examples.map(ex => `
+                    <div class="group relative rounded-2xl overflow-hidden border border-zinc-700">
+                        <img src="${ex.url}" alt="${ex.caption}" class="w-full h-48 object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
+                            <div class="text-xs text-white/90">${ex.caption}</div>
+                        </div>
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
+                            <i class="fa-solid fa-search-plus text-white opacity-0 group-hover:opacity-100 text-2xl transition-all"></i>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                examplesSection.style.display = 'none';
+            }
+            
+            // Meta
+            document.getElementById('modal-date').textContent = recipe.date;
+            document.getElementById('modal-author').textContent = recipe.author;
+            
+            // Show modal
+            document.getElementById('recipe-modal').classList.remove('hidden');
+            document.getElementById('recipe-modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('recipe-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        function copyPrompt() {
+            if (!currentRecipe) return;
+            
+            navigator.clipboard.writeText(currentRecipe.prompt).then(() => {
+                const originalText = event.currentTarget ? event.currentTarget.innerHTML : '';
+                
+                // Show toast
+                const toast = document.createElement('div');
+                toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-6 py-3 rounded-3xl flex items-center gap-x-3 shadow-xl z-[200]`;
+                toast.innerHTML = `
+                    <i class="fa-solid fa-check"></i>
+                    <span>Prompt copied to clipboard!</span>
+                `;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.transition = 'all 0.3s ease';
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translate(-50%, 20px)';
+                    setTimeout(() => toast.remove(), 300);
+                }, 1800);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = currentRecipe.prompt;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                alert('Prompt copied! (fallback)');
+            });
+        }
+
+        function showContributeModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-lg w-full p-8">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-2xl font-semibold">Contribute a Recipe</h3>
+                            <p class="text-sm text-zinc-400 mt-1">Help grow the cookbook</p>
+                        </div>
+                        <button onclick="this.closest('.fixed').remove()" class="text-3xl leading-none text-zinc-400 hover:text-white">&times;</button>
+                    </div>
+                    
+                    <div class="space-y-5 text-sm">
+                        <div>
+                            <div class="font-medium mb-1.5">1. Fork the repository</div>
+                            <div class="text-xs text-zinc-400">Create your own copy of grok-recipes on GitHub</div>
+                        </div>
+                        <div>
+                            <div class="font-medium mb-1.5">2. Add your recipe to <code class="bg-zinc-800 px-1.5 py-px rounded">recipes.json</code></div>
+                            <div class="text-xs text-zinc-400">Follow the schema in the README</div>
+                        </div>
+                        <div>
+                            <div class="font-medium mb-1.5">3. Add 1-3 example images</div>
+                            <div class="text-xs text-zinc-400">Place them in <code class="bg-zinc-800 px-1.5 py-px rounded">assets/images/recipes/</code></div>
+                        </div>
+                        <div>
+                            <div class="font-medium mb-1.5">4. Open a Pull Request</div>
+                            <div class="text-xs text-zinc-400">Include testing notes and why you think it deserves to be in the cookbook</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 flex gap-x-3">
+                        <a href="https://github.com" target="_blank" 
+                           class="flex-1 py-3 bg-white text-zinc-900 rounded-2xl font-semibold text-center text-sm hover:bg-zinc-100 transition-all">
+                            Go to GitHub
+                        </a>
+                        <button onclick="this.closest('.fixed').remove()" 
+                                class="flex-1 py-3 border border-zinc-700 hover:bg-zinc-800 rounded-2xl text-sm font-medium">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function initializeFilters() {
+            // Set initial active filter
+            const allBtn = document.getElementById('filter-all');
+            if (allBtn) {
+                allBtn.classList.add('active', 'bg-cyan-400', 'text-zinc-900');
+            }
+            
+            // Search on enter
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    filterRecipes();
+                }
+            });
+            
+            // Initial render
+            renderRecipes(recipes);
+        }
+
+        function initializeEverything() {
+            initializeTailwind();
+            initializeFilters();
+            
+            // Keyboard shortcut hint
+            console.log('%c[Grok Recipes] Press "/" to focus search', 'color:#64748b');
+            
+            // Bonus: "/" focuses search
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+                    e.preventDefault();
+                    document.getElementById('search-input').focus();
+                }
+            });
+            
+            // Easter egg: Konami code
+            let konami = '';
+            document.addEventListener('keydown', function(e) {
+                konami += e.key;
+                if (konami.length > 10) konami = konami.slice(-10);
+                if (konami === 'ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba') {
+                    document.body.style.filter = 'hue-rotate(180deg)';
+                    setTimeout(() => document.body.style.filter = '', 2000);
+                    konami = '';
+                }
+            });
+            
+            console.log('%c✅ Grok Recipes site initialized successfully!', 'color:#22c55e');
+        }
+
+        // Boot the app
+        window.onload = initializeEverything;
+    </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+[
+  {
+    "id": "strategic-business-analyst",
+    "title": "Strategic Business Analyst",
+    "category": "text",
+    "tags": ["business", "analysis", "framework", "mckinsey"],
+    "prompt": "You are a McKinsey senior partner with 20+ years experience in strategy consulting. Analyze the following business situation using the MECE framework (Mutually Exclusive, Collectively Exhaustive). Structure your response as: 1. Situation Summary 2. Key Issues (prioritized) 3. Strategic Options (with pros/cons) 4. Recommended Action + Risks. Be concise, data-driven, and use bullet points. Situation: [PASTE YOUR SITUATION HERE]",
+    "variations": [
+      "Add: 'Include 2026 market trends and competitor benchmarks.'",
+      "Change role to 'Sequoia Capital partner' for startup focus"
+    ],
+    "rating": 9.3,
+    "notes": "Consistently produces executive-ready output. The MECE + numbered structure prevents rambling. Works amazingly with real-time X data when you add 'Include latest trends from X'. Tested on 20+ business cases — average 8.9/10 from users.",
+    "examples": [
+      {"url": "https://picsum.photos/id/1015/600/400", "caption": "Sample structured output (replace with screenshot)"}
+    ],
+    "date": "2026-04-10",
+    "author": "PromptMaster42"
+  },
+  {
+    "id": "cyberpunk-neo-tokyo-portrait",
+    "title": "Cyberpunk Neo-Tokyo Portrait",
+    "category": "image",
+    "tags": ["cinematic", "cyberpunk", "portrait", "neon", "grok-imagine"],
+    "prompt": "Close-up cinematic portrait of a lone cyberpunk mercenary standing on a rain-slicked neon rooftop in Neo-Tokyo at midnight. Dramatic low-angle shot, coat billowing in the wind, glowing holographic katana in hand, intense determined expression, volumetric god rays piercing through dense smog and neon signs, cyberpunk noir aesthetic, shot on Arri Alexa 65 with anamorphic lenses, rich cyan and magenta lighting, hyper-detailed skin texture and rain droplets, cinematic color grade, 8K --ar 3:2 --stylize 650 --v 6",
+    "variations": [
+      "Add 'in the style of Blade Runner 2049 and Denis Villeneuve' for even moodier lighting",
+      "Change to female protagonist with long flowing hair and tactical gear"
+    ],
+    "rating": 9.5,
+    "notes": "This is currently one of the highest-rated Imagine recipes. The combination of specific lighting (volumetric rays + color accents) + camera reference + aspect ratio produces consistently stunning faces and atmosphere. Avoids content moderation extremely well. Tested 30+ times with 9.5+ average rating from community.",
+    "examples": [
+      {"url": "https://picsum.photos/id/1016/600/400", "caption": "Primary output — perfect for X thumbnails"},
+      {"url": "https://picsum.photos/id/102/600/400", "caption": "Female variation — equally strong"}
+    ],
+    "date": "2026-04-15",
+    "author": "ImagineWizard"
+  },
+  {
+    "id": "creative-short-story-generator",
+    "title": "Creative Short Story Generator",
+    "category": "text",
+    "tags": ["creative", "writing", "story", "fiction"],
+    "prompt": "You are a critically acclaimed short story writer in the style of Ted Chiang and Haruki Murakami. Write a complete 800-1200 word short story based on the following premise. Use elegant prose, subtle world-building, and a thought-provoking twist at the end. Premise: [YOUR PREMISE HERE]. Output format: Title\n\nStory text\n\n---\n\nTwist explanation (optional, only if requested)",
+    "variations": [
+      "Add 'Make it sci-fi with a philosophical bent'",
+      "Add 'Tone: melancholic but hopeful'"
+    ],
+    "rating": 8.8,
+    "notes": "Role + specific authors + strict word count + twist requirement = reliably excellent literary output. The 'Twist explanation' at the end is a nice optional bonus that many users love.",
+    "examples": [
+      {"url": "https://picsum.photos/id/1074/600/400", "caption": "Example story output screenshot"}
+    ],
+    "date": "2026-04-12",
+    "author": "StoryWeaver"
+  },
+  {
+    "id": "cinematic-mountain-landscape",
+    "title": "Cinematic Mountain Landscape at Golden Hour",
+    "category": "image",
+    "tags": ["landscape", "cinematic", "golden-hour", "nature", "grok-imagine"],
+    "prompt": "Epic wide cinematic landscape of jagged snow-capped mountains at golden hour, low sun casting long dramatic shadows across a pristine alpine lake, mist rising from the water, wildflowers in foreground, shot on 70mm IMAX film, anamorphic lenses with beautiful lens flare, rich warm color grade with teal shadows, National Geographic level detail, hyper-realistic, 8K --ar 16:9 --stylize 400",
+    "variations": [
+      "Add 'in the style of Peter Lik and Ansel Adams' for black & white version",
+      "Change time to 'blue hour with northern lights'"
+    ],
+    "rating": 9.1,
+    "notes": "Excellent all-rounder for nature/landscape prompts. Golden hour + specific film reference + lens flare keywords give that premium cinematic feel every time. Great for wallpapers and print.",
+    "examples": [
+      {"url": "https://picsum.photos/id/1018/600/400", "caption": "Stunning golden hour result"}
+    ],
+    "date": "2026-04-18",
+    "author": "LandscapePro"
+  },
+  {
+    "id": "luxury-perfume-product-shot",
+    "title": "Luxury Perfume Product Photography",
+    "category": "image",
+    "tags": ["product", "commercial", "luxury", "still-life", "grok-imagine"],
+    "prompt": "Studio product photography of an elegant amber glass perfume bottle on a polished black marble surface. Soft diffused window light from the left creating beautiful highlights and long elegant shadows. Dried rose petals and a single gold chain scattered artistically. Shot on Hasselblad H6D-100c, 120mm macro lens, f/8, commercial editorial style, Vogue-level lighting and composition, ultra sharp details on glass and liquid, luxurious and sophisticated mood, 8K --ar 4:5 --stylize 300",
+    "variations": [
+      "Add 'with subtle steam rising from the bottle' for dynamic feel",
+      "Change to 'on antique wooden vanity with vintage mirror reflection'"
+    ],
+    "rating": 9.0,
+    "notes": "One of the best commercial product recipes. The combination of specific lighting direction + lens + surface + styling props produces magazine-quality results consistently. Perfect for mockups and client work.",
+    "examples": [
+      {"url": "https://picsum.photos/id/106/600/400", "caption": "Luxury product shot example"}
+    ],
+    "date": "2026-04-19",
+    "author": "ProductGuru"
+  },
+  {
+    "id": "grok-imagine-video-prompt-template",
+    "title": "Grok Imagine Video Prompt Template",
+    "category": "image",
+    "tags": ["video", "motion", "cinematic", "template", "grok-imagine"],
+    "prompt": "Create a cinematic 8-second video of [SUBJECT + ACTION]. Camera: [MOVEMENT e.g. slow dolly-in, tracking shot, low angle crane up]. Style: [FILM LOOK e.g. Blade Runner 2049, Studio Ghibli, hyperrealistic]. Lighting: [MOOD e.g. golden hour volumetric, dramatic chiaroscuro]. Motion details: [SPECIFICS e.g. gentle wind in hair, subtle breathing, smooth camera pan]. Audio: [SOUND DESIGN e.g. subtle rain + distant thunder, orchestral swell]. Technical: 720p, smooth 24fps, natural physics --motion 750",
+    "variations": [
+      "For character consistency: Add 'same character as previous generation, exact same face and clothing'",
+      "For complex scenes: Break into 2-3 shots and stitch description"
+    ],
+    "rating": 8.7,
+    "notes": "This template structure (Scene + Camera + Style + Lighting + Motion + Audio) is the current meta for high-quality Grok Imagine video. Users report significantly better motion and coherence when all 5 elements are addressed.",
+    "examples": [
+      {"url": "https://picsum.photos/id/1033/600/400", "caption": "Example video thumbnail"}
+    ],
+    "date": "2026-04-20",
+    "author": "VideoVanguard"
+  }
+]
