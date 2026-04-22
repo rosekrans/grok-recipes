@@ -3,8 +3,8 @@
 **Battle-tested prompt recipes for Grok (text) & Grok Imagine (images/videos).**  
 Track what actually works, share iterations, and build the ultimate prompt cookbook.
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-brightgreen)](https://YOUR_USERNAME.github.io/grok-recipes)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/YOUR_USERNAME/grok-recipes/pulls)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-brightgreen)](https://rosekrans.github.io/grok-recipes)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/rosekrans/grok-recipes/pulls)
 
 ## ✨ Features
 
@@ -25,7 +25,7 @@ Track what actually works, share iterations, and build the ultimate prompt cookb
 
 ```bash
 # Clone and open
-git clone https://github.com/YOUR_USERNAME/grok-recipes.git
+git clone https://github.com/rosekrans/grok-recipes.git
 cd grok-recipes
 # Open index.html in your browser (or use Live Server)
 ```
@@ -90,3 +90,4 @@ Open an Issue or start a Discussion. Let's make Grok even more powerful together
 ---
 
 *Built with ❤️ for the Grok community. Powered by xAI.*
+# grok-recipes-pvt

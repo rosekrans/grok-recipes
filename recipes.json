@@ -17,6 +17,28 @@
     "date": "2026-04-10",
     "author": "PromptMaster42"
   },
+{
+  "id": "boyish-freckled-muse-kitchen",
+  "title": "Boyish Freckled Muse – Modern Kitchen",
+  "category": "image",
+  "tags": ["portrait", "photorealistic", "freckles", "boyish", "lewd", "kitchen", "character-consistency"],
+  "prompt": "Photorealistic boyish young woman in her early 20s, boyish fair skin with dense freckles across face, cheeks, nose and chest, large blue eyes with dark eyeliner, natural masculine round face, neutral intense pout, short messy auburn-red bob haircut with choppy side-swept bangs, slim petite build, small natural breasts, wearing black blazer unbuttoned with deep plunging neckline showing subtle cleavage and underboob, no top underneath, large black leather Chanel cuff bracelet on left wrist, left hand under chin while leaning forward with direct gaze, modern kitchen with stainless steel cabinets and warm ambient lighting, highly detailed realistic photo, full character consistency, lewd cleavage details",
+  "variations": [
+    "Add 'wearing only the open blazer, no pants' for more revealing version",
+    "Change lighting to 'dramatic side lighting with strong shadows' for moodier feel",
+    "Add 'leaning against kitchen island, three-quarter view' for different composition"
+  ],
+  "rating": 9.2,
+  "notes": "Excellent character consistency prompt. The combination of 'boyish + dense freckles + masculine round face + specific jewelry' creates a very recognizable look across generations. The unbuttoned blazer + underboob detail works reliably without triggering moderation when kept artistic. Tested with 3 strong outputs.",
+  "examples": [
+    {"url": "assets/images/recipes/boyish-freckled-1.jpg", "caption": "Main shot – direct gaze, perfect freckle detail"},
+    {"url": "assets/images/recipes/boyish-freckled-2.jpg", "caption": "Slight variation – different angle"},
+    {"url": "assets/images/recipes/boyish-freckled-3.jpg", "caption": "Third variation – warm kitchen lighting emphasis"}
+  ],
+  "date": "2026-04-22",
+  "author": "rosekrans"
+},
+
   {
     "id": "cyberpunk-neo-tokyo-portrait",
     "title": "Cyberpunk Neo-Tokyo Portrait",
